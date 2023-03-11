@@ -1,9 +1,13 @@
-nav.bd-links p.caption { 
+nav.bd-links p.caption {
     /* Don't capitalize the part headings in the navigation bar */
-    text-transform: none; 
+    text-transform: none;
 }
 
-div.cell_output table.dataframe {
-    /* make pandas dataframes smaller */
+p.caption {
+    font-weight: bold;
+}
+
+div.cell_output table {
+    /* make tables smaller */
     font-size: 80%;
 }

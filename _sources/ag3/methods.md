@@ -1,29 +1,31 @@
-# Ag3 sequencing and variant calling methods
+# Ag3.0 sequencing and variant calling methods
 
-This page contains a brief description of sequencing and variant
-calling methods used in phase 3 of the *Anopheles gambiae* 1000
-Genomes Project (Ag1000G). This is a preliminary version of methods
-that will be released in final form as part of a future publication by
-the Ag1000G Consortium.
+This page contains a description of methods used in phase 3 of the *Anopheles gambiae* 1000 Genomes Project (Ag1000G). 
+
+
+## Partner studies and population sampling
+
+Ag1000G phase 3 includes data from 3,081 individual mosquitoes, including 2,784 mosquitoes collected from natural populations in 19 countries. 
+Three species are represented within the cohort: {{ gamb }}, {{ colu }} and {{ arab }}.
+Further details of studies which contributed these samples and specimen collection locations and methods are provided in the {doc}`../studies-ag1000g` page.
 
 
 ## Whole-genome sequencing
 
 All library preparation and sequencing was performed at the Wellcome
-Sanger Institute. Paired-end multiplex libraries were prepared using
+Sanger Institute.
+Paired-end multiplex libraries were prepared using
 the manufacturer's protocol, with the exception that genomic DNA was
 fragmented using Covaris Adaptive Focused Acoustics rather than
-nebulization. Multiplexes comprised 12 tagged individual mosquitoes
-and three lanes of sequencing were generated for each multiplex to
-even out variations in yield between sequencing runs. Cluster
-generation and sequencing were undertaken according to the
-manufacturer's protocol for paired-end sequence reads with insert size
-in the range 100--200 bp. 4,693 individual mosquitoes were sequenced
-in total, of which 3,130 were sequenced using the Illumina HiSeq 2000
-platform and 1,563 were sequenced using the Illumina HiSeq X platform.
-All individuals were sequenced to a target coverage of 30×.  The HiSeq
-2000 sequencing runs generated 100 bp paired-end reads, and the HiSeq
-X sequencing runs generated 150 bp paired-end reads.
+nebulization. 
+Multiplexes comprised 12 tagged individual mosquitoes and three lanes of sequencing were generated for each multiplex to
+even out variations in yield between sequencing runs. 
+Cluster generation and sequencing were undertaken according to the
+manufacturer's protocol for paired-end sequence reads with insert size in the range 100--200 bp.
+4,693 individual mosquitoes were sequenced in total, of which 3,130 were sequenced using the Illumina HiSeq 2000 platform and 1,563 were sequenced using the Illumina HiSeq X platform.
+All individuals were sequenced to a target coverage of 30×.
+The HiSeq 2000 sequencing runs generated 100 bp paired-end reads, and the HiSeq X sequencing runs generated 150 bp paired-end reads. 
+Library preparation and sequencing was performed at the Wellcome Sanger Institute by the Sample Logistics, Sequencing and Informatics facilities.
 
 
 ## Alignment and SNP calling
@@ -47,13 +49,12 @@ and
 [genotyping](https://github.com/malariagen/pipelines/tree/v0.0.4/pipelines/SNP-genotyping-vector)
 pipelines are also available from GitHub. Following successful
 completion of these pipelines, samples entered the sample quality
-control (QC) process described below.
+control (QC) process described below. Alignment and SNP calling was performed by the MalariaGEN Resource Centre Team. Open source pipeline implementations were developed by the Broad Institute Data Engineering Team.
 
 
 ## Sample QC
 
-The following subsections describe analyses performed to identify and
-exclude samples from the final dataset.
+The following subsections describe analyses performed to identify and exclude samples from the final dataset. Sample QC was performed by the MalariaGEN Resource Centre Team.
 
 
 ### Coverage
@@ -222,7 +223,7 @@ vast majority of Mendelian errors are likely to be due to errors in
 sequencing, alignment or SNP calling. The general approach we took
 was to use Mendelian consistency to identify sets of positive and
 negative training sites, then used these to train a machine learning
-model that classified all genomic sites as either PASS or FAIL.
+model that classified all genomic sites as either PASS or FAIL. Site filtering was performed by the MalariaGEN Resource Centre Team.
 
 
 ### Site filters for use with *An. gambiae* and/or *An. coluzzii*
@@ -308,7 +309,7 @@ Copy number variant (CNV) calling methods followed those described in
 [Lucas et
 al. (2019)](https://genome.cshlp.org/content/29/8/1250.full#sec-8)
 with some adaptations to accommodate the different mosquito species
-being analysed, described further below.
+being analysed, described further below. CNV calling was performed by the Liverpool School of Tropical Medicine.
 
 
 ### Calculation and normalization of coverage
@@ -431,6 +432,18 @@ identified for a CNV allele, we recorded the presence of that allele
 in all samples with at least four supporting diagnostic reads.
 
 
+## Haplotype phasing
+
+Genotypes at biallelic SNPs passing site filters were phased into haplotypes using a combination of read-backed and statistical phasing. Read-backed phasing was performed for each individual using [WhatsHap](https://whatshap.readthedocs.io/en/latest/) version 1.0. Statistical phasing was then performed using [SHAPEIT4](https://odelaneau.github.io/shapeit4/) version 4.2.1. An [open source WDL implementation of this phasing pipeline](https://github.com/malariagen/pipelines/tree/master/pipelines/phasing-vector/gcp) is available from the [malariagen/pipelines GitHub repository](https://github.com/malariagen/pipelines). The phasing pipeline was developed by the Broad Institute Data Engineering Team and run using the [Terra platform](https://app.terra.bio/).
+
+To allow for a range of different analyses, three different haplotype reference panels were constructed, each using a different subset of samples and applying different site filters:
+
+* ``gamb_colu_arab`` - This haplotype reference panel included all wild-caught samples, and phased biallelic SNPs passing the ``gamb_colu_arab`` site filters.
+* ``gamb_colu`` - This haplotype reference panel included all wild-caught samples assigned as either *An. gambiae*, *An. coluzzii* or intermediate *An. gambiae/An. coluzzii* via the AIM species calling method, and phased biallelic SNPs passing the ``gamb_colu`` site filters.
+* ``arab`` - This haplotype reference panel included all wild-caught samples assigned as *An. arabiensis* via the AIM species calling method, and phased biallelic SNPs passing the ``arab`` site filters. 
+
+
+
 ## Acknowledgments
 
 We would like to thank the staff of the Wellcome Sanger Institute
@@ -439,8 +452,7 @@ contributions to the production of this data release.
 
 We would like to thank the members of the Data Engineering team of the
 Broad Institute of Harvard and MIT for their work on open source
-implementations of the alignment and SNP calling pipelines used in
-Ag1000G phase 3.
+implementations of the alignment, SNP calling and haplotype phasing pipelines used in Ag1000G phase 3.
 
 
 ## Appendices
